@@ -1,11 +1,11 @@
 // Next.js will always look for index file
 import Link from "next/link";
 import Layout from "../components/layout";
-import { getSortedList } from "../lib/data";
+import { getSortedList } from "../lib/data-firebase";
 
 // define getStaticProps()
 export async function getStaticProps() {
-  const allData = getSortedList();
+  const allData = await getSortedList();
   return {
     props: { allData },
   };

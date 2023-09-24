@@ -1,27 +1,25 @@
 import Link from "next/link";
 import Layout from "../../components/layout";
-import { getAllIds, getData, getBooksReadById } from "../../lib/data";
+import { getAllIds, getData } from "../../lib/data-firebase";
 
 export async function getStaticProps({ params }) {
   const itemData = await getData(params.id);
-  const readBooksData = await getBooksReadById(params.id);
   return {
     props: {
       itemData,
-      readBooksData,
     },
   };
 }
 
 export async function getStaticPaths() {
-  const paths = getAllIds();
+  const paths = await getAllIds();
   return {
     paths,
     fallback: false,
   };
 }
 
-export default function Entry({ itemData, readBooksData }) {
+export default function Entry({ itemData }) {
   return (
     <Layout>
       <h1>Member Info</h1>
@@ -35,21 +33,6 @@ export default function Entry({ itemData, readBooksData }) {
           <a href="#" className="card-link">
             {itemData ? itemData.email : ""}
           </a>
-        </div>
-      </article>
-      <h1>Books Recommended</h1>
-      <article className="card col-6">
-        <div className="list-group">
-          {readBooksData &&
-            readBooksData.map(({ id, name, author }) => (
-              <Link
-                key={id}
-                href={`/books/${id}`}
-                className="list-group-item list-group-item-action"
-              >
-                {name} by {author}
-              </Link>
-            ))}
         </div>
       </article>
     </Layout>
